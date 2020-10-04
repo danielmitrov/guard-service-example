@@ -2,7 +2,7 @@ import {Request, Response, NextFunction} from 'express';
 
 import {authBaseAPI, appName} from '../consts';
 import {validateGuardToken} from '../utils/validateGuardToken';
-import {createToken} from '../utils/serviceToken';
+import {createToken, validateToken} from '../utils/serviceToken';
 
 
 function getCurrentUrl(req) {
@@ -23,6 +23,19 @@ async function handleGuardToken(req: Request, res: Response) {
     }
 }
 
+async function validateSitesToken(req: Request, res: Response, next: NextFunction) {
+    try {
+        const {username} = await validateToken(req.cookies.token);
+        req.username = username;
+        next();
+    } catch {
+        const currentUrl = getCurrentUrl(req);
+
+        res.cookie('token', '', {maxAge: 0});
+        res.redirect(currentUrl);
+    }
+}
+
 async function handleUnauthenticated(req: Request, res: Response) {
     const currentUrl = getCurrentUrl(req);
     const redirectUrl = new URL(authBaseAPI);
@@ -35,6 +48,8 @@ async function handleUnauthenticated(req: Request, res: Response) {
 async function authenticate(req: Request, res: Response, next: NextFunction) {
     if (req.query.token) {
         handleGuardToken(req, res);
+    } else if (req.cookies.token) {
+        validateSitesToken(req, res, next);
     } else {
         handleUnauthenticated(req, res);
     }
