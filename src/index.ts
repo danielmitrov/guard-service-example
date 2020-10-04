@@ -14,11 +14,9 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(cookieParser())
 
-
 app.get('/', middleware.authenticate, (req, res) => {
     res.send(`Hello ${req.username}!`);
 });
-
 
 server.listen(port, () => {
     console.log(`Server is listening on port ${port}.`);
