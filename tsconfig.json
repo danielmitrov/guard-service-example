@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+      "module": "commonjs",
+      "baseUrl": "./",
+      "outDir": "dist",
+      "removeComments": true,
+      "experimentalDecorators": true,
+      "allowSyntheticDefaultImports": true,
+      "esModuleInterop": true,
+      "noImplicitAny": false,
+      "target": "es6",
+      "emitDecoratorMetadata": true,
+      "moduleResolution": "node",
+      "importHelpers": true,
+      "types": [
+        "node"
+      ],
+      "typeRoots": [
+        "node_modules/@types",
+        "./types"
+      ],
+    },
+    "include": [
+      "./src/**/*.ts"
+    ],
+    "exclude": [
+      "node_modules",
+      "./src/dist/"
+    ]
+  }
